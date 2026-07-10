@@ -50,12 +50,17 @@ function countOccurrences(haystack, needle) {
 }
 
 const REGULATION_UNITS = '장|절|조|항|호|번|편|목|차'
+const SEPARATOR_RE = /={5,}\s*원\s*글\s*={5,}/
 
 function normalizeContentText(text) {
   if (!text) return text
 
+  // "원 글" 구분선 아래는 질문 원문을 그대로 인용한 부분이라, 질문 탭에서 이미
+  // 보여주는 내용과 중복되므로 답변에서는 잘라낸다.
+  const withoutQuotedOriginal = text.split(SEPARATOR_RE)[0]
+
   // 조문 인용 중간에 낀 개행 복원 (예: "15\n장" -> "15장")
-  const merged = text
+  const merged = withoutQuotedOriginal
     .replace(/\r\n/g, '\n')
     .replace(new RegExp(`(\\d+)[ \\t]*\\n[ \\t]*(${REGULATION_UNITS})`, 'g'), '$1$2')
 
@@ -131,7 +136,6 @@ export default function KsaeSearch() {
   const [filter, setFilter] = useState('all')
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState(null)
-  const [modalTab, setModalTab] = useState('question')
 
   const keywords = useMemo(() => tokenize(query), [query])
 
@@ -151,7 +155,6 @@ export default function KsaeSearch() {
 
   function openModal(item) {
     setSelected(item)
-    setModalTab('question')
   }
 
   return (
@@ -252,13 +255,7 @@ export default function KsaeSearch() {
       </div>
 
       {selected && (
-        <QnaModal
-          item={selected}
-          keywords={keywords}
-          tab={modalTab}
-          onTabChange={setModalTab}
-          onClose={() => setSelected(null)}
-        />
+        <QnaModal item={selected} keywords={keywords} onClose={() => setSelected(null)} />
       )}
     </div>
   )
@@ -324,7 +321,7 @@ function Pagination({ page, totalPages, onChange }) {
   )
 }
 
-function QnaModal({ item, keywords, tab, onTabChange, onClose }) {
+function QnaModal({ item, keywords, onClose }) {
   const answered = Boolean(item.answer)
 
   useEffect(() => {
@@ -367,37 +364,21 @@ function QnaModal({ item, keywords, tab, onTabChange, onClose }) {
           </button>
         </div>
 
-        <div className="flex gap-2 border-b border-border p-4">
-          <button
-            type="button"
-            onClick={() => onTabChange('question')}
-            className={`chip text-sm ${tab === 'question' ? 'chip-active' : ''}`}
-          >
-            질문
-          </button>
-          <button
-            type="button"
-            onClick={() => onTabChange('answer')}
-            disabled={!answered}
-            className={`chip text-sm disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent ${
-              tab === 'answer' ? 'chip-active' : ''
-            }`}
-          >
-            답변{!answered && ' (없음)'}
-          </button>
-        </div>
-
         <div className="flex-1 overflow-y-auto p-5">
-          {tab === 'question' ? (
-            <QnaBody content={item.question} keywords={keywords} />
-          ) : answered ? (
-            <QnaBody content={item.answer} keywords={keywords} />
+          <SectionLabel title="질문" />
+          <QnaBody content={item.question} keywords={keywords} />
+
+          {answered ? (
+            <>
+              <SectionLabel title="답변" className="mt-6" />
+              <QnaBody content={item.answer} keywords={keywords} />
+            </>
           ) : (
-            <p className="text-sm text-fg-faint">아직 등록된 답변이 없습니다.</p>
+            <p className="mt-6 text-sm text-fg-faint">아직 등록된 답변이 없습니다.</p>
           )}
         </div>
 
-        <div className="flex flex-wrap gap-2 border-t border-border p-4">
+        <div className="flex flex-wrap gap-2 border-border p-4">
           <a href={item.q_url} target="_blank" rel="noreferrer" className="pill-link">
             질문 원문 보기 ↗
           </a>
@@ -408,6 +389,15 @@ function QnaModal({ item, keywords, tab, onTabChange, onClose }) {
           )}
         </div>
       </div>
+    </div>
+  )
+}
+
+function SectionLabel({ title, className = '' }) {
+  return (
+    <div className={`mb-3 flex items-center gap-3 text-xs font-medium text-fg-faint ${className}`}>
+      {title}
+      <span className="h-px flex-1 bg-border-strong" />
     </div>
   )
 }
@@ -423,7 +413,7 @@ function QnaBody({ content, keywords }) {
       </p>
       {attachments.length > 0 && (
         <div className="mt-4 border-t border-border pt-3">
-          <p className="mb-2 text-xs font-medium text-fg-faint">첨부파일</p>
+          <SectionLabel title="첨부파일" />
           <ul className="flex flex-col gap-1">
             {attachments.map((file, i) => (
               <li key={i}>
