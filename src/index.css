@@ -1,0 +1,80 @@
+@import "tailwindcss";
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+
+@theme {
+  --font-sans: "Pretendard Variable", ui-sans-serif, sans-serif;
+
+  /* Design tokens: dark, Syntrix-style palette */
+  --color-bg: #22242A;
+  --color-surface: #12161e;
+  --color-surface-2: #2E313B;
+  --color-border: rgba(70, 70, 70, 0.08);
+  --color-border-strong: rgba(70, 70, 70, 0.16);
+  --color-fg: #f4f6f8;
+  --color-fg-muted: #81858B;
+  --color-fg-faint: #9BA0A5;
+  --color-accent-from: #FF363A;
+  --color-accent-to: #F46F36;
+  --color-accent: #38bdf8;
+
+  --radius-card: 1rem;
+  --radius-panel: 1.5rem;
+
+  --shadow-glow: 0 20px 60px -30px rgba(56, 189, 248, 0.35);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: "Pretendard Variable", ui-sans-serif, sans-serif;
+  background: var(--color-bg);
+}
+
+@layer components {
+  .surface-panel {
+    @apply rounded-panel border border-border bg-surface;
+  }
+
+  .surface-card {
+    @apply rounded-card border border-border bg-surface transition hover:border-border-strong hover:bg-surface-2;
+  }
+
+  .chip {
+    @apply rounded-full px-3.5 py-1.5 text-xs font-medium text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg;
+  }
+
+  .chip-active {
+    @apply bg-surface-2 text-fg ring-1 ring-border-strong;
+  }
+
+  .badge {
+    @apply items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+
+  .badge-answered {
+    @apply bg-emerald-400/10 text-emerald-300;
+  }
+
+  .badge-unanswered {
+    @apply bg-surface-2 text-fg-faint;
+  }
+
+  .icon-btn {
+    @apply flex h-full aspect-square shrink-0 items-center justify-center rounded-full;
+  }
+
+  .glow-orb {
+    @apply bg-gradient-to-br from-accent-from to-accent-to;
+  }
+
+  .pill-tag {
+    @apply rounded-full border border-border bg-surface/80 px-3.5 py-1.5 text-xs backdrop-blur;
+  }
+
+  .pill-link {
+    @apply rounded-full border border-border px-3.5 py-2 text-sm font-medium text-fg-muted hover:bg-surface-2 hover:text-fg;
+  }
+}
