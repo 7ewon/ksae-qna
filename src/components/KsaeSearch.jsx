@@ -201,9 +201,9 @@ export default function KsaeSearch() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left text-sm">
+            <table className="w-full border-collapse text-left text-base">
               <thead>
-                <tr className="border-b border-border text-xs uppercase tracking-wide text-fg-faint">
+                <tr className="border-b border-border text-sm uppercase tracking-wide text-fg-faint">
                   <th className="w-28 py-3 pr-3 font-medium">상태</th>
                   <th className="py-3 pr-3 font-medium">제목</th>
                   <th className="hidden w-32 py-3 pr-3 font-medium sm:table-cell">작성자</th>
@@ -241,7 +241,7 @@ export default function KsaeSearch() {
 
                 {pagedResults.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="py-16 text-center text-sm text-fg-faint">
+                    <td colSpan={5} className="py-16 text-center text-base text-fg-faint">
                       검색 결과가 없습니다.
                     </td>
                   </tr>
@@ -346,7 +346,7 @@ function QnaModal({ item, keywords, onClose }) {
             <h2 className="text-lg font-semibold leading-snug text-fg">
               {highlight(item.title, keywords)}
             </h2>
-            <div className="mt-1.5 flex items-center gap-2 text-xs text-fg-faint">
+            <div className="mt-1.5 flex items-center gap-2 text-sm text-fg-faint">
               <span>{item.author}</span>
               <span>·</span>
               <span>{item.date}</span>
@@ -374,7 +374,7 @@ function QnaModal({ item, keywords, onClose }) {
               <QnaBody content={item.answer} keywords={keywords} />
             </>
           ) : (
-            <p className="mt-6 text-sm text-fg-faint">아직 등록된 답변이 없습니다.</p>
+            <p className="mt-6 text-base text-fg-faint">아직 등록된 답변이 없습니다.</p>
           )}
         </div>
 
@@ -395,7 +395,7 @@ function QnaModal({ item, keywords, onClose }) {
 
 function SectionLabel({ title, className = '' }) {
   return (
-    <div className={`mb-3 flex items-center gap-3 text-xs font-medium text-fg-faint ${className}`}>
+    <div className={`mb-3 flex items-center gap-3 text-sm font-medium text-fg-faint ${className}`}>
       {title}
       <span className="h-px flex-1 bg-border-strong" />
     </div>
@@ -408,7 +408,7 @@ function QnaBody({ content, keywords }) {
 
   return (
     <div>
-      <p className="whitespace-pre-line text-sm leading-relaxed text-fg-muted">
+      <p className="whitespace-pre-line text-base leading-relaxed text-fg-muted">
         {highlight(normalizeContentText(content.content_text), keywords)}
       </p>
       {attachments.length > 0 && (

@@ -51,7 +51,7 @@ body {
   }
 
   .badge {
-    @apply items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+    @apply items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-medium;
   }
 
   .badge-answered {
