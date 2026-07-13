@@ -4,77 +4,107 @@
 @theme {
   --font-sans: "Pretendard Variable", ui-sans-serif, sans-serif;
 
-  /* Design tokens: dark, Syntrix-style palette */
-  --color-bg: #22242A;
-  --color-surface: #12161e;
-  --color-surface-2: #2E313B;
-  --color-border: rgba(70, 70, 70, 0.08);
-  --color-border-strong: rgba(70, 70, 70, 0.16);
-  --color-fg: #f4f6f8;
-  --color-fg-muted: #81858B;
-  --color-fg-faint: #9BA0A5;
-  --color-accent-from: #FF363A;
-  --color-accent-to: #F46F36;
-  --color-accent: #38bdf8;
+  /* Design tokens: light board palette */
+  --color-surface: #FFFFFF;
+  --color-surface-2: #EEF0F2;
+  --color-border: rgba(15, 23, 42, 0.08);
+  --color-border-strong: rgba(15, 23, 42, 0.16);
+  --color-fg: #16181C;
+  --color-fg-muted: #666B72;
+  --color-fg-faint: #9AA0A6;
 
-  --radius-card: 1rem;
-  --radius-panel: 1.5rem;
+  --color-accent: #D0021B;
+  --color-accent-soft: rgba(208, 2, 27, 0.1);
 
-  --shadow-glow: 0 20px 60px -30px rgba(56, 189, 248, 0.35);
+  --color-mark-bg: #FDE68A;
+  --color-mark-fg: #7C4A03;
+
+  --color-badge-answered-bg: #E4F6EC;
+  --color-badge-answered-fg: #1F9254;
+  --color-badge-unanswered-bg: #EEF0F2;
+  --color-badge-unanswered-fg: #9AA0A6;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   margin: 0;
   font-family: "Pretendard Variable", ui-sans-serif, sans-serif;
-  background: var(--color-bg);
+  background: var(--color-surface);
 }
 
 @layer components {
-  .surface-panel {
-    @apply rounded-panel border border-border bg-surface;
+  .topbar {
+    @apply flex items-center justify-between border-b border-border bg-surface px-6 py-4;
   }
 
-  .surface-card {
-    @apply rounded-card border border-border bg-surface transition hover:border-border-strong hover:bg-surface-2;
+  .page-title {
+    @apply text-2xl font-bold tracking-tight text-fg sm:text-3xl;
   }
 
-  .chip {
-    @apply rounded-full px-3.5 py-1.5 text-xs font-medium text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg;
-  }
-
-  .chip-active {
-    @apply bg-surface-2 text-fg ring-1 ring-border-strong;
-  }
-
-  .badge {
-    @apply items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-medium;
-  }
-
-  .badge-answered {
-    @apply bg-emerald-400/10 text-emerald-300;
-  }
-
-  .badge-unanswered {
-    @apply bg-surface-2 text-fg-faint;
+  .search-bar {
+    @apply flex h-11 flex-1 items-center gap-2 outline-none px-4 bg-surface-2;
   }
 
   .icon-btn {
-    @apply flex h-full aspect-square shrink-0 items-center justify-center rounded-full;
+    @apply flex shrink-0 items-center justify-center rounded-full transition-colors;
   }
 
-  .glow-orb {
-    @apply bg-gradient-to-br from-accent-from to-accent-to;
+  .tab-btn {
+    @apply min-w-[4.5rem] rounded-full px-4 py-2 text-center text-sm font-medium text-fg-muted transition-colors hover:text-fg;
   }
 
-  .pill-tag {
-    @apply rounded-full border border-border bg-surface/80 px-3.5 py-1.5 text-xs backdrop-blur;
+  .tab-btn-active {
+    @apply text-fg;
+  }
+
+  .tab-indicator {
+    @apply pointer-events-none absolute bottom-0 h-0.5 bg-fg transition-all duration-300 ease-out;
+  }
+
+  .list-row {
+    @apply flex cursor-pointer items-center gap-4 border-b border-border px-4 py-4 transition-colors hover:bg-surface-2;
+  }
+
+  .list-index {
+    @apply w-8 shrink-0 text-center text-sm text-fg-faint;
+  }
+
+  .list-title {
+    @apply flex-1 truncate text-[15px] font-medium text-fg;
+  }
+
+  .list-date {
+    @apply shrink-0 text-sm text-fg-faint;
+  }
+
+  .list-arrow {
+    @apply flex size-6 shrink-0 items-center justify-center text-fg-faint;
+  }
+
+  .status-pill {
+    @apply shrink-0 rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap;
+  }
+
+  .status-pill-answered {
+    @apply bg-badge-answered-bg text-badge-answered-fg;
+  }
+
+  .status-pill-unanswered {
+    @apply bg-badge-unanswered-bg text-badge-unanswered-fg;
+  }
+
+  .page-btn {
+    @apply flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg disabled:opacity-30 disabled:hover:bg-transparent;
+  }
+
+  .page-btn-active {
+    @apply bg-fg text-surface hover:bg-fg hover:text-surface;
   }
 
   .pill-link {
-    @apply rounded-full border border-border px-3.5 py-2 text-sm font-medium text-fg-muted hover:bg-surface-2 hover:text-fg;
+    @apply rounded-full border border-border px-3.5 py-2 text-sm font-medium text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg;
   }
 }
